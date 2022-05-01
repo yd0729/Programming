@@ -133,7 +133,7 @@
 		"version": "0.2.0",
 		"configurations": [
 			{
-				"name": "debug active",
+				"name": "C++",
 				"type": "lldb",
 				"request": "launch",
 				"program": "${workspaceFolder}/target/cpp/build/${fileBasenameNoExtension}",
