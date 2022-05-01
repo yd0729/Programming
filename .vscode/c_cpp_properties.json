@@ -7,9 +7,22 @@
                 ".vscode/include/cpp"
             ],
             "defines": [],
-            "forcedInclude": [],
-            "macFrameworkPath": ["/Library/Frameworks", "/System/Library/Frameworks"],
-            "intelliSenseMode": "macos-clang-x64"
+            "cStandard": "c99",
+            "cppStandard": "c++20",
+            "forcedInclude": [
+                "leetcode.hpp",
+                "bits/stdc++.h"
+            ],
+            "macFrameworkPath": [
+                "/Library/Frameworks",
+                "/System/Library/Frameworks"
+            ],
+            "intelliSenseMode": "macos-clang-x64",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}"
+                ]
+            }
         }
     ],
     "version": 4
