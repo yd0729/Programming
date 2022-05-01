@@ -2,17 +2,11 @@
     "configurations": [
         {
             "name": "Mac",
-            "includePath": [
-                "${default}",
-                ".vscode/include/cpp"
-            ],
+            "includePath": [],
             "defines": [],
             "cStandard": "c99",
             "cppStandard": "c++20",
-            "forcedInclude": [
-                "leetcode.hpp",
-                "bits/stdc++.h"
-            ],
+            "forcedInclude": [],
             "macFrameworkPath": [
                 "/Library/Frameworks",
                 "/System/Library/Frameworks"
@@ -22,7 +16,12 @@
                 "path": [
                     "${workspaceFolder}"
                 ]
-            }
+            },
+            "compilerPath": "/usr/bin/clang",
+            "compilerArgs": [
+                "-I",
+                ".vscode/include"
+            ]
         }
     ],
     "version": 4

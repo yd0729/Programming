@@ -133,21 +133,19 @@
 		"version": "0.2.0",
 		"configurations": [
 			{
-				"name": "run active file",
+				"name": "debug active",
 				"type": "lldb",
 				"request": "launch",
-				"program": "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
-				"args": [],
-				"cwd": "${workspaceFolder}/.build",
+				"program": "${workspaceFolder}/target/cpp/build/${fileBasenameNoExtension}",
+				"stdio": [
+					"${workspaceFolder}/test/input/debug.in",
+					"${workspaceFolder}/test/output/debug.out"
+				],
+				"cwd": "${workspaceFolder}",
 				"stopAtEntry": false,
-				"preLaunchTask": ".build active file with g++",
+				"preLaunchTask": "build active file with clang++",
 				"environment": [],
 				"console": "integratedTerminal",
-				"windows": {
-					"type": "cppvsdbg",
-					"program": "${workspaceFolder}/.build/${fileBasenameNoExtension}.exe",
-					"preLaunchTask": "build active file with cl.exe",
-				}
 			},
 		]
 	},
@@ -159,18 +157,18 @@
 				"command": "clang++",
 				"args": [
 					"-fdiagnostics-color=always",
+					"-O3",
 					"-g",
 					"-std=c++20",
 					"-I",
-					".vscode",
-					"-H", // 查看可以使用的预编译文件（前面带 ! 的是预编译的）
-					"-D",
-					"YD_DEBUG",
+					".vscode/include",
 					"-include",
-					".vscode/bits/stdc++.h",
+					"bits/stdc++.h",
+					"-include-pch",
+					"${workspaceFolder}/target/cpp/pch/stdc++.h.gch",
 					"${file}",
 					"-o",
-					"${workspaceFolder}/.build/${fileBasenameNoExtension}.exe"
+					"${workspaceFolder}/target/cpp/build/${fileBasenameNoExtension}"
 				],
 				"options": {
 					"cwd": "${workspaceFolder}"
@@ -182,22 +180,6 @@
 					"kind": "build",
 					"isDefault": true
 				},
-				"windows": {
-					"args": [
-						"-fdiagnostics-color=always",
-						"-g",
-						"-std=c++20",
-						// "-target", // link to libstdc++ using gcc / g++ 
-						// "x86_64-pc-windows-gnu", // 注释掉的话在 Windows 上会默认 link to Microsoft's STL using MSVC
-						// "-H", // 查看可以使用的预编译文件（前面带 ! 的是预编译的）
-						"-D",
-						"YD_DEBUG",
-						"${file}",
-						"-o",
-						// "${workspaceFolder}/.build/test.exe"
-						"${workspaceFolder}/.build/${fileBasenameNoExtension}.exe"
-					],
-				}
 			},
 		],
 		"version": "2.0.0"

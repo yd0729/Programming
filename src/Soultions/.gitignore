@@ -1,8 +1,0 @@
-in.txt
-out.txt
-build/*
-!build/.gitkeep
-target
-Debug LC.cpp
-Debug.cpp
-stdc++.h.gch
