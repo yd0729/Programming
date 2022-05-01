@@ -20,7 +20,7 @@
             "compilerPath": "/usr/bin/clang",
             "compilerArgs": [
                 "-I",
-                ".vscode/include"
+                ".vscode/cpp/include"
             ]
         }
     ],

@@ -136,7 +136,7 @@
 				"name": "C++",
 				"type": "lldb",
 				"request": "launch",
-				"program": "${workspaceFolder}/target/cpp/build/${fileBasenameNoExtension}",
+				"program": "${workspaceFolder}/.vscode/cpp/build/${fileBasenameNoExtension}",
 				"stdio": [
 					"${workspaceFolder}/test/input/debug.in",
 					"${workspaceFolder}/test/output/debug.out"
@@ -161,14 +161,14 @@
 					"-g",
 					"-std=c++20",
 					"-I",
-					".vscode/include",
+					".vscode/cpp/include",
 					"-include",
 					"bits/stdc++.h",
 					"-include-pch",
-					"${workspaceFolder}/target/cpp/pch/stdc++.h.gch",
+					"${workspaceFolder}/.vscode/cpp/pch/stdc++.h.gch",
 					"${file}",
 					"-o",
-					"${workspaceFolder}/target/cpp/build/${fileBasenameNoExtension}"
+					"${workspaceFolder}/.vscode/cpp/build/${fileBasenameNoExtension}"
 				],
 				"options": {
 					"cwd": "${workspaceFolder}"
