@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${default}",
+                ".vscode/include/cpp"
+            ],
+            "defines": [],
+            "forcedInclude": [],
+            "macFrameworkPath": ["/Library/Frameworks", "/System/Library/Frameworks"],
+            "intelliSenseMode": "macos-clang-x64"
+        }
+    ],
+    "version": 4
+}

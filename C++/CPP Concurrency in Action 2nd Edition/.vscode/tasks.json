@@ -1,0 +1,90 @@
+{
+  "windows": {
+    "options": {
+      "shell": {
+        "executable": "cmd.exe",
+        "args": [
+          "/C", // 必须要 cd 才行，不能直接用，我也不知道为啥
+          "cd \"C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/\"",
+          "&&",
+          "vcvars64.bat", // x64，clang 默认是 x64 的
+          "&&",
+          "cd \"${workspaceFolder}\\build\"",
+          "&&"
+        ]
+      }
+    }
+  },
+  "tasks": [
+    {
+      "label": "clang++ 生成活动文件",
+      "type": "shell",
+      "command": "clang++",
+      "args": [
+        "-fdiagnostics-color=always",
+        "-g",
+        "-std=c++20",
+        "-I",
+        ".vscode",
+        // "-H", // 查看可以使用的预编译文件（前面带 ! 的是预编译的）
+        "-D",
+        "YD_DEBUG",
+        // "-include",
+        // "bits/stdc++.h",
+        "${file}",
+        "-o",
+        "${workspaceFolder}/build/run.exe"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "windows": {
+        "args": [
+          "-fdiagnostics-color=always",
+          "-g",
+          "-std=c++20",
+          "-target", // link to libstdc++ using gcc / g++ 
+          "x86_64-pc-windows-gnu", // 注释掉的话在 Windows 上会默认 link to Microsoft's STL using MSVC
+          "-H",  // 查看可以使用的预编译文件（前面带 ! 的是预编译的）
+          "-D",
+          "YD_DEBUG",
+          "${file}",
+          "-o",
+          "${workspaceFolder}/build/run.exe"
+        ],
+      }
+    },
+    {
+      "type": "shell",
+      "label": "cl.exe 生成活动文件",
+      "command": "cl.exe",
+      "args": [
+        "/std:c++20", // 要有这行，不然不能用 and or stringstream ...
+        // "/O2",
+        // "/Ob3",
+        "/Zi",
+        "/EHsc",
+        "/Fe:",
+        "${workspaceFolder}/build/run.exe",
+        // "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
+        "/DYD_DEBUG",
+        "${file}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$msCompile"
+      ],
+      "group": "build"
+    }
+  ],
+  "version": "2.0.0"
+}
