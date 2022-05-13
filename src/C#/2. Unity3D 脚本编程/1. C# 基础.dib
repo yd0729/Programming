@@ -219,3 +219,215 @@ Console.WriteLine(num);
 ## 枚举与结构体
 
 枚举和结构体都是值类型
+
+#!csharp
+
+enum Color { Red = 1, Green, Blue };
+
+Console.WriteLine((int) Color.Red);
+Console.WriteLine((int) Color.Green);
+
+Color c = Color.Green;
+Console.WriteLine((int) c);
+
+#!csharp
+
+object[] person = {"小王", 20, 89};  // 不好用，因为没有类型信息
+
+struct Person
+{
+    public string name;
+    public int age;
+    public int height;
+}
+
+Person p = new Person();
+p.name = "小王";
+p.age = 20;
+p.height = 89;
+
+#!markdown
+
+## 命名空间
+
+```csharp
+namespace 空间名称
+{
+    // 代码
+}
+
+using 空间名称;
+```
+
+#!markdown
+
+## 类与对象
+
+#!markdown
+
+### 属性与构造
+
+构造方法：
+
+- 无返回值
+- 方法名与类名相同
+
+### 静态与抽象
+
+- 静态成员：类的变量，不是实例的．
+- 静态类：只能包含静态成员．
+  
+  ```csharp
+  static class 类名
+  {
+      // ...
+  }
+  ```
+
+#!csharp
+
+class Person
+{
+    // 字段
+    private string name;
+    private int age;
+    private int height;
+    public static int population;  // 静态变量
+
+    // 属性
+    public string Name
+    {
+        get { return name; }  // 允许读
+        set { name = (value == "" ? "无名氏" : value); }  // 允许写，value 是外界赋的值
+    }
+
+    public int Age {get;}  // 只读属性
+
+    // 构造器
+    static Person() { population = 0; }  // 静态构造器
+
+    private Person()
+    {
+        population++;
+    }
+
+    public Person(string name, int age): this()
+    {
+        this.name = name;
+        this.age = age;
+    }
+
+    public Person(string name, int age, int height) : this(name, age)
+    {
+        this.height = height;
+    }
+
+    // 析构器
+    ~Person()
+    {
+        Console.WriteLine("析构函数被调用");
+    }
+
+    // 一般方法：可以使用静态和非静态的成员和方法
+    public void Chat()
+    {
+        Console.WriteLine($"你好，我是{name}");
+    }
+
+    // 静态方法：只能用同为静态的成员方法
+    public static void writePopulation()
+    {
+        Console.WriteLine($"当前人口数：{population}");
+    }
+}
+
+// 实例化一个对象
+Person p = new Person("小张", 2, 180);
+p.Chat();
+Console.WriteLine(p.Name);
+p.Name = "";
+Console.WriteLine(p.Name);
+
+Console.WriteLine(Person.population);
+Person.writePopulation();
+
+#!markdown
+
+### 继承与多态
+
+- public：完全可访问
+- private：同一 class 可访问
+- protected：同一 class 或派生的子类可访问
+- internal：同一程序集可访问
+- protected internal：protected 并 internal
+- private protected：protected 且 internal
+
+不写的话，默认是 protected ．
+
+```csharp
+class 派生类: 基类
+{
+    
+}
+```
+
+多态是同一个行为具有多个不同表现形式或形态的能力，在面向对象编程范式中，多态往往表现为“一个接口，多个功能”．
+
+1. 父类变量指向子类
+2. 函数重载
+
+#!csharp
+
+class Animal
+{
+    public string name = "动物";
+
+    public virtual void say()  // 虚方法
+    {
+        Console.WriteLine("动物的叫声");
+    }
+
+    public void eat()  // 不是虚方法
+    {
+        Console.WriteLine("动物吃东西");
+    }
+
+    public virtual void say(string str)  // 虚方法
+    {
+        Console.WriteLine($"动物说：{str}");
+    }
+}
+
+class Dog : Animal
+{
+    public override void say()
+    {
+        base.say();
+        Console.WriteLine(" 汪汪");
+    }
+
+    public new void eat()
+    {
+        Console.WriteLine("狗吃东西");
+    }
+}
+
+class Cat : Animal
+{
+    public override void say()
+    {
+        base.say();
+        Console.WriteLine(" 喵喵");
+    }
+}
+
+Animal a = new Dog();
+Animal b = new Cat();
+
+a.say();
+b.say();
+
+a.eat();  // 动物吃东西
+((Dog) a).eat();  // 狗吃东西
+
+a.say("你好");
