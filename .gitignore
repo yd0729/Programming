@@ -3,3 +3,6 @@ target
 debug.in
 debug.out
 build
+bin
+obj
+.DS_Store
