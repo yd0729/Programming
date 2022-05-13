@@ -1,0 +1,221 @@
+#!markdown
+
+# Unity 脚本 的 C# 基础
+## Hello World
+
+#!csharp
+
+System.Console.WriteLine("Hello. My name is Inigo Montoya.");
+
+#!csharp
+
+string requirements, miracleMax;
+requirements = miracleMax = "It would take a miracle.";
+System.Console.WriteLine(miracleMax);
+
+#!markdown
+
+## 类型
+
+var
+
+#!markdown
+
+## 数组
+
+是引用类型
+
+#!csharp
+
+int[] arr1 = new int[5];
+int[] arr2 = new int[]{1, 2, 3};
+int[] arr3 = {1, 2, 3, 4, 5};
+int[] arr4 = arr3;
+
+arr3[1] = 5;
+System.Console.WriteLine(arr4[1]);
+
+int[,] arr5 = new int[2, 3]{{1, 2, 3}, {1, 2, 3}};
+
+#!markdown
+
+## 类型转换
+
+### 隐式转换
+
+#!csharp
+
+byte a = 5;
+int b = a;
+b
+
+#!markdown
+
+### 显示转换
+
+#!csharp
+
+byte c = (byte) a;
+int d = Convert.ToInt32(c);
+
+Console.WriteLine(c);
+Console.WriteLine(d);
+
+#!markdown
+
+### 字符串的转换
+
+#!csharp
+
+int e = 123;
+string s = e.ToString();
+Console.WriteLine(s);
+int f = int.Parse(s);
+Console.WriteLine(f);
+
+#!markdown
+
+## 装箱与拆箱
+
+值类型与引用类型的装换．
+
+只有值类型才存在装箱和拆箱．
+
+值类型在栈中，引用类型在栈中保存指向堆中数据的指针，装箱时需要将栈中的数据复制到堆中．
+
+装箱是隐式的，拆箱是显式的，因为你需要告诉 C# 你要给拆出来的值赋予什么类型．
+
+#!csharp
+
+int i = 3;
+object o = i;  // 装箱
+int j = (int) o;  // 拆箱
+Console.WriteLine(j);
+
+#!markdown
+
+## 分支和循环
+
+和 C++ 一样．
+
+#!csharp
+
+int[] a = {1, 2, 3};
+
+foreach (int i in a)  // foreach 是只读遍历，这个 i 不能改变
+{
+    Console.WriteLine(i);
+}
+
+#!markdown
+
+### 冒泡排序
+
+#!csharp
+
+int[] a = {3, 2, 1};
+
+for (int i = 0; i < a.Length - 1; i++)  // n - 1 遍
+{
+    for (int j = 0; j < a.Length - i - 1; j++)  // 最后 i 个已经冒泡到正确的位置了．
+    {
+        if (a[j] > a[j + 1])
+        {
+            int temp = a[j];
+            a[j] = a[j + 1];
+            a[j + 1] = temp;
+        }
+    }
+}
+
+a
+
+#!markdown
+
+### 选择排序
+
+#!csharp
+
+int[] a = {3, 2, 1};
+
+for (int i = 0; i < a.Length - 1; i++)  // n - 1 遍
+{
+    int min_idx = i;
+    for (int j = i + 1; j < a.Length; j++)
+    {
+        if (a[j] < a[min_idx]) {
+            min_idx = j;
+        }
+    }
+    int temp = a[i];
+    a[i] = a[min_idx];
+    a[min_idx] = temp;
+}
+
+a
+
+#!markdown
+
+## 函数与递归
+
+#!csharp
+
+static void fun(string str) 
+{
+    Console.WriteLine(str);
+}
+
+static void fun(int a, int b = 3) 
+{
+    Console.WriteLine(a);
+    Console.WriteLine(b);
+}
+
+fun("Hello");
+fun(1);
+fun(1, 4);
+
+static int add(int a, int b) {
+    return a + b;
+}
+
+Console.WriteLine(add(1, 5));
+
+#!csharp
+
+static void swap(ref int a, ref int b) // 把值类型按照引用传递
+{
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+int a = 1;
+int b = 2;
+
+swap(ref a, ref b);
+
+Console.WriteLine(a);
+Console.WriteLine(b);
+
+// swap(1, 2); 不能用字面值
+
+#!csharp
+
+static int Test(out string str) // out 参数在方法中一定要被赋值，否则会报错
+{
+    str = "Hello";
+    return 1;
+}
+
+string str;
+int num = Test(out str);
+
+Console.WriteLine(str);
+Console.WriteLine(num);
+
+#!markdown
+
+## 枚举与结构体
+
+枚举和结构体都是值类型
