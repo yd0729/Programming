@@ -283,6 +283,33 @@ using 空间名称;
       // ...
   }
   ```
+- 抽象类：不能实例化
+- 抽象方法：没有方法体，不能是 private ，如果子类不是抽象类，则必须重写
+
+### 接口
+
+一组包含了类或结构体可以实现的功能的定义．
+
+- 不能包含字段
+- 是引用类型
+- 只包含定义，不包含实现，不能被实例化
+- 默认 public ，不可以使用其他访问级别
+- 类的继承只能单继承，接口的实现支持多实现
+- 接口一旦被实现，就必须实现接口当中的所有成员
+
+#### 接口与抽象类
+
+相同点：
+
+- 都不能被实例化
+- 都包含了由其他类或结构继承或实现的抽象成员
+
+不同点：
+
+- 抽象类当中除了有抽象成员外还可以拥有非抽象成员，而接口中所有的成员都是抽象的
+- 抽象成员可以使用修饰符修饰，接口当中接口成员访问级别默认不可修改，为 public
+- 接口当中不可以包含构造方法，析构方法，静态成员，常量
+- 抽象类支持单继承，接口支持多继承
 
 #!csharp
 
@@ -306,8 +333,9 @@ class Person
     // 构造器
     static Person() { population = 0; }  // 静态构造器
 
-    private Person()
+    protected Person()
     {
+        this.name = "无名氏";
         population++;
     }
 
@@ -351,6 +379,24 @@ Console.WriteLine(p.Name);
 Console.WriteLine(Person.population);
 Person.writePopulation();
 
+interface IWolf
+{
+    void Cry();
+}
+
+class WolfPerson: Person, IWolf
+{
+    public void Cry()
+    {
+        Console.WriteLine("啊啊啊");
+    }
+}
+
+IWolf w = new WolfPerson();
+w.Cry();
+Person p2 = (Person) w;
+p2.Chat();
+
 #!markdown
 
 ### 继承与多态
@@ -378,16 +424,13 @@ class 派生类: 基类
 
 #!csharp
 
-class Animal
+abstract class Animal
 {
     public string name = "动物";
 
-    public virtual void say()  // 虚方法
-    {
-        Console.WriteLine("动物的叫声");
-    }
+    public abstract void say();  // 抽象方法
 
-    public void eat()  // 不是虚方法
+    public void eat()  // 方法
     {
         Console.WriteLine("动物吃东西");
     }
@@ -402,8 +445,7 @@ class Dog : Animal
 {
     public override void say()
     {
-        base.say();
-        Console.WriteLine(" 汪汪");
+        Console.WriteLine("汪汪");
     }
 
     public new void eat()
@@ -416,8 +458,7 @@ class Cat : Animal
 {
     public override void say()
     {
-        base.say();
-        Console.WriteLine(" 喵喵");
+        Console.WriteLine("喵喵");
     }
 }
 
@@ -431,3 +472,175 @@ a.eat();  // 动物吃东西
 ((Dog) a).eat();  // 狗吃东西
 
 a.say("你好");
+
+#!markdown
+
+## 泛型
+
+使用 object 也能实现类似泛型的功能，但是：
+
+1. 在处理值类型时：会涉及装箱和拆箱操作，性能损失可能会比较严重．
+2. 在处理引用类型时：涉及强制类型转化，也有性能损失．
+3. 内部实现时还是需要很多分支来区分不同的类型．
+
+C# 中的泛型能够将类型作为参数来传递．
+
+1. 泛型可以重用代码，保护类型的安全以及提高性能
+2. 降低强制转换或装箱操作的成本和风险
+3. 对泛型参数进行限定以访问特定数据类型的方法
+
+#!csharp
+
+public static void Swap<T>(ref T a, ref T b) where T: struct
+{
+    T temp = a;
+    a = b;
+    b = temp;
+}
+
+int a = 1;
+int b = 3;
+Swap(ref a, ref b);
+Swap<int>(ref a, ref b);
+
+Console.WriteLine(a);
+Console.WriteLine(b);
+
+#!markdown
+
+约束：where
+
+- where T: struct ， T 是值类型
+- where T: class ， T 是引用类型
+- where T: new() ， T 有无参构造
+- where T: 基类名 ， T 是这个类或派生类
+- where T: 接口名 ， T 实现了这个接口
+- where T: U ， T 是 U 或派生自 U
+
+#!csharp
+
+void Test<T, U>(T a, U b) where T: struct where U: IComparable<T>, new() // new() 必须写在最后
+{
+    
+}
+
+#!markdown
+
+## 集合与队列
+
+集合：
+
+- 一组具有相同性质的对象
+- 可通过索引访问集合成员
+- 可通过“键”访问
+- 大小可以动态调整
+- 可在运行时添加或删除元素
+
+泛型集合：`System.Collenctions.Generic`
+
+非泛型集合：`System.Collections`
+
+`System.Collections.Specialized` 中也包含一些有用的集合类．
+
+#!markdown
+
+### 数组 ArrayList
+
+- 动态增加和减少元素
+- 实现了 `ICollection` 和 `IList` 和 `IEnumerable` 接口
+- 灵活设置数组大小
+- 不安全的集合类型：什么类型都能放
+- 元素为值类型时，效率不高（装箱和拆箱耗性能）
+
+#!csharp
+
+using System.Collections;
+
+ArrayList arr = new ArrayList();
+
+arr.Add(1);
+arr.Add("hhh");
+
+arr.Insert(0, 1.1f);
+
+foreach (var item in arr)
+{
+    Console.WriteLine(item);
+}
+
+arr.Remove(1.1f);
+arr.RemoveAt(0);
+
+arr.Reverse();
+
+Console.WriteLine(arr.Count);
+Console.WriteLine(arr.Contains(1));
+
+arr.Clear();
+
+#!markdown
+
+### 堆栈 Stack
+
+- 不安全的
+- 可接受 null
+- 泛型为 `Stack<T>`
+
+#!csharp
+
+Stack stack = new Stack();
+
+stack.Push(1);
+stack.Push(2);
+
+object o = stack.Pop();
+int num = (int) o;
+
+Console.WriteLine(num);
+Console.WriteLine(stack.Peek());
+
+stack.Contains(1);
+
+#!markdown
+
+### 队列 Queue
+
+- 和上边一样
+
+#!csharp
+
+Queue queue = new Queue();
+
+queue.Enqueue(1);
+queue.Enqueue("hhh");
+
+var obj = queue.Dequeue();
+queue.Contains(1);
+queue.Peek();
+
+#!markdown
+
+### 哈希表 HashTable
+
+Key 和 Value 都是 object 类型．
+
+#!csharp
+
+Hashtable ht = new Hashtable();
+
+ht.Add(1, "one");
+ht.Add(2, "two");
+ht.Add("three", 3);
+
+Console.WriteLine(ht[1]);
+Console.WriteLine(ht["three"]);
+
+ht.ContainsKey(1);
+ht.ContainsValue("one");
+
+ht.Remove(1);
+
+foreach (var item in ht.Keys)
+{
+    Console.WriteLine(item);
+}
