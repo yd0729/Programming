@@ -644,3 +644,210 @@ foreach (var item in ht.Keys)
 {
     Console.WriteLine(item);
 }
+
+#!markdown
+
+## 泛型集合
+
+- `List<T>`：背包
+- `Stack<T>`
+- `Queue<T>`：对象池，循环使用对象，不用创建销毁
+- `Dictionary<int, string>`
+
+#!csharp
+
+List<int> list = new();
+
+list.Add(1);
+
+foreach (var item in list)
+{
+    Console.WriteLine(item);
+}
+
+Dictionary<int, string> dict = new();
+
+dict.Add(1, "one");
+dict.Add(2, "two");
+
+for (int i = 0; i < 3; i += 1) {
+    bool res = dict.TryGetValue(i, out string value);
+    if (res) {
+        Console.WriteLine(value);
+    } else {
+        Console.WriteLine("没有这个键");
+    }
+}
+
+#!markdown
+
+## 委托
+
+C# 中的委托类似于 C/C++ 中的函数指针．
+
+委托是一种可以存放方法的自定义类型．
+
+委托链的绑定与解绑定．
+
+#!csharp
+
+public delegate int CalHandler(int a, int b);
+
+static int add(int a, int b) {
+    int res = a + b;
+    Console.WriteLine($"{a} + {b} = {res}");
+    return res;
+}
+
+static int sub(int a, int b) {
+    int res = a - b;
+    Console.WriteLine($"{a} - {b} = {res}");
+    return res;
+}
+
+CalHandler handler = sub;
+handler += sub;
+
+handler(3, 4);
+
+handler += add;
+
+handler(5, 6);
+
+handler -= sub;
+
+handler(7, 8);
+
+#!markdown
+
+## 匿名委托与事件
+
+事件：特殊的委托对象
+
+- 在事件所在的类中，可以对事件进行赋值（=）、调用、绑定（+=）和解绑定（-=）
+- 在非事件所在的类中，只能对事件进行绑定（+=）和解绑定（-=）
+
+#!csharp
+
+class Test {
+    public delegate void MyDelegate(int a, int b);
+
+    static public MyDelegate myDelegate = delegate(int a, int b) {
+        Console.WriteLine($"{a} + {b} = {a + b}");
+    };  // 匿名方法
+
+    static public event MyDelegate MyEvent;  // 事件
+}
+
+Test.myDelegate = (int a, int b) => {
+    Console.WriteLine($"{a} - {b} = {a - b}");
+};  // lambda 表达式
+
+Test.myDelegate(3, 4);
+
+Test.MyEvent += (int a, int b) => {
+    Console.WriteLine($"{a} * {b} = {a * b}");
+};
+
+// Test.MyEvent = (int a, int b) => {
+//     Console.WriteLine($"{a} * {b} = {a * b}");
+// };  // 报错
+
+// Test.MyEvent(5, 6);  // 报错
+
+#!csharp
+
+using System.Threading;
+
+class Player { // 播放器
+    public delegate void PlayHandler(string name);
+
+    public void Play(PlayHandler handler) {
+        handler("开始播放");
+        int time = new Random().Next(5, 10) * 1000;
+        Thread.Sleep(time);
+        handler("播放结束");
+    }
+}
+
+Player player = new();
+
+player.Play((string name) => {
+    Console.WriteLine(name);
+});
+
+#!markdown
+
+## 字符串
+
+string 是引用类型，但很特殊．
+
+只能读不能写．
+
+可以 `+` 、 `+=` ，但不能 `-` 、 `-=` ．
+
+#!csharp
+
+string str1 = "abc";
+string str2 = "abc";
+
+Console.WriteLine(Object.ReferenceEquals(str1, str2));  // 引用同一个 object
+
+Console.WriteLine(str1[0]);  // 可以使用下标
+
+#!csharp
+
+string str = "Hello Unity";
+
+Console.WriteLine(str.Contains("Unity"));
+
+#!csharp
+
+string str = "Hello Unity";
+
+Console.WriteLine(str.Remove(0, 6));
+
+#!csharp
+
+String str1 = "Hello";
+String str2 = "Unity";
+
+Console.WriteLine(String.Concat(str1, " ", str2));
+
+#!csharp
+
+string str = "Unity";
+
+Console.WriteLine(str.Insert(0, "Hello "));
+
+#!csharp
+
+String str = "Hello World";
+
+Console.WriteLine(str.Replace("World", "Unity"));
+
+#!csharp
+
+String str = "Hello World";
+
+var arr = str.Split(' ');
+foreach (var item in arr)
+{
+    Console.WriteLine(item);
+}
+
+#!csharp
+
+string str = "Hello Unity";
+
+Console.WriteLine(str.Substring(6, 5));
+
+#!csharp
+
+var sb = new StringBuilder();
+
+sb.Append("Hello");
+sb.Append(" ");
+sb.Append("Unity");
+
+Console.WriteLine(sb.ToString());
